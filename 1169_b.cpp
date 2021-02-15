@@ -1,0 +1,169 @@
+// Created by Tanuj Jain
+#include<bits/stdc++.h>
+#include<ext/pb_ds/assoc_container.hpp>
+#include<ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+#define pb push_back
+#define mp make_pair
+typedef long long ll;
+typedef pair<int,int> pii;
+template<class T> using oset=tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+const int INF = 0x3f3f3f3f;
+int knight_moves[8][2]={{-2,-1},{-1,-2},{1,-2},{2,-1},{-2,1},{-1,2},{1,2},{2,1}};
+int moves[4][2]={{0,1},{0,-1},{1,0},{-1,0}};
+struct custom_hash {
+    static uint64_t splitmix64(uint64_t x) {
+        // http://xorshift.di.unimi.it/splitmix64.c
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
+    }
+
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
+};
+int main()
+{
+	ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+	#ifndef ONLINE_JUDGE
+	freopen("inputf.in","r",stdin);
+	freopen("outputf.in","w",stdout);
+	#endif
+
+	int n,m;
+	cin>>n>>m;
+	vector<pii>v(m);
+	for(int i=0;i<m;i++)
+	{
+		cin>>v[i].first>>v[i].second;
+	}
+	//x has to be one number from the first pair
+	//fix x as v[0].first
+	int x=v[0].first;
+	int i;
+	for(i=1;i<m;i++)
+	{
+		//try to find b in s similar manner
+		if(v[i].first==x || v[i].second==x)
+			continue;
+		else
+		{
+			//b has to be on the 2 values in mismacthed pair
+			//take the first value from pair and check
+			int y=v[i].first;
+			int j=i+1;
+			bool ok=true;
+			//cout<<x<<" "<<y<<endl;
+			for(j;j<m;j++)
+			{
+				if(v[j].first!=x && v[j].first!=y && v[j].second!=y && v[j].second!=x)
+				{
+
+					ok=false;
+					break;
+				}
+			}
+			if(ok)
+			{
+				//cout<<"HERE1"<<endl;
+				cout<<"YES";
+				return 0;
+			}
+			//repeat the same procedure but pick y as v[i].second
+			else
+			{
+				int y=v[i].second;
+				int j=i+1;
+				bool ok=true;
+				//cout<<x<<" "<<y<<endl;
+				for(j;j<m;j++)
+				{
+					if(v[j].first!=x && v[j].first!=y && v[j].second!=y && v[j].second!=x)
+					{
+						ok=false;
+						break;
+					}
+				}
+				if(ok)
+				{
+					//cout<<"HERE2"<<endl;
+					cout<<"YES";
+					return 0;
+				}
+			}
+			break;
+		}
+	}
+
+	//if this fails take x as the second value and check the whole procedure
+	x=v[0].second;
+	for(i=1;i<m;i++)
+	{
+		//try to find b in s similar manner
+		if(v[i].first==x || v[i].second==x)
+			continue;
+		else
+		{
+			//b has to be on the 2 values in mismacthed pair
+			//take the first value from pair and check
+			int y=v[i].first;
+			int j=i+1;
+			bool ok=true;
+			//cout<<x<<" "<<y<<endl;
+			for(j;j<m;j++)
+			{
+				if(v[j].first!=x && v[j].first!=y && v[j].second!=x && v[j].second!=y)
+				{
+
+					ok=false;
+					break;
+				}
+			}
+			if(ok)
+			{
+				//cout<<"HERE3"<<endl;
+				cout<<"YES";
+				return 0;
+			}
+			//repeat the same procedure but pick y as v[i].second
+			else
+			{
+				int y=v[i].second;
+				int j=i+1;
+				bool ok=true;
+				//cout<<x<<" "<<y<<endl;
+				for(j;j<m;j++)
+				{
+					if(v[j].first!=x && v[j].first!=y && v[j].second!=y && v[j].second!=x)
+					{
+						ok=false;
+						break;
+					}
+				}
+				if(ok)
+				{
+					//cout<<"HERE4"<<endl;
+					cout<<"YES";
+					return 0;
+				}
+			}
+			break;
+		}
+	}
+	if(i==m)
+	{
+		cout<<"YES";
+		return 0;
+	}
+	cout<<"NO";
+	return 0;
+
+
+}

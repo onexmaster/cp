@@ -18,8 +18,8 @@ int main()
     cout.tie(0);
 
 	#ifndef ONLINE_JUDGE
-	freopen("inputf.in","r",stdin);
-	freopen("outputf.in","w",stdout);
+	freopen("input.txt","r",stdin);
+	freopen("output.txt","w",stdout);
 	#endif
 
 	string st;

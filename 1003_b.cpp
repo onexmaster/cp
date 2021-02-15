@@ -17,8 +17,8 @@ int main()
     cout.tie(0);
 
 	#ifndef ONLINE_JUDGE
-	freopen("inputf.in","r",stdin);
-	freopen("outputf.in","w",stdout);
+	freopen("input.txt","r",stdin);
+	freopen("output.txt","w",stdout);
 	#endif
 
 	int a,b,x;
@@ -27,10 +27,46 @@ int main()
 	x--;
 	a--;
 	b--;
-	for(int i=2;i<=x;i+=2)
+	while(x)
 	{
+		if(s[int(s.size()-1)]=='1')
+			s+="10";
+		else
+			s+="01";
+		x--;
 		a--;
 		b--;
-		ans+="01";
 	}
+	if(x==0 && a==0 && b==0)
+	{
+		cout<<s;
+		return 0;
+	}
+	string temp;
+	string ans;
+	if(a>0)
+		temp.append(a,'0');
+	temp+=s;
+	//cout<<temp<<endl;
+	if(b>0)
+	{
+		bool ok=false;
+		if(temp[int(temp.size())-1]=='1')
+			temp.append(b,'1'),ok=true;
+		else
+		{
+			string temp1;
+			temp1.append(b,'1');
+			for(int i=0;i<temp.size()-1;i++)
+			{
+				if(s[i]=='1' && s[i+1]=='1')
+				 ans=temp.substr(0,i)+temp1+temp.substr(i+1);
+			}
+		}
+		if(ok)
+			cout<<temp;
+		else
+			cout<<ans;		
+	}
+	return 0;
 }

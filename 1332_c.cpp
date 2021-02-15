@@ -1,5 +1,4 @@
 // Created by Tanuj Jain
-//DOES NOT WORK
 #include<bits/stdc++.h>
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
@@ -21,44 +20,36 @@ struct custom_hash {
         x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
         return x ^ (x >> 31);
     }
-
+ 
     size_t operator()(uint64_t x) const {
         static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-int match(string temp1)
+const int MAXN=2e5+10;
+int comp_sz;
+bool vis[MAXN];
+int freq[26];
+void dfs(int src,string &st,vector<vector<int>>&ada)
 {
-	int l=0;
-	int r=temp1.size()-1;
-	int ans=0;
-	while(l<r)
-	{
-		if(temp1[l]==temp1[r])
-		{
-			ans++;
-			l++;
-			r--;
-		}
-		else
-		{
-			l++;
-			r--;
-		}
-	}
-	return ans;
+	vis[src]=true;
+	comp_sz++;
+	freq[st[src]-'a']++;
+	for(auto edges:ada[src])
+		if(!vis[edges])
+			dfs(edges,st,ada);
 }
 int main()
 {
 	ios::sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
-
+ 
 	#ifndef ONLINE_JUDGE
 	freopen("inputf.in","r",stdin);
 	freopen("outputf.in","w",stdout);
 	#endif
-
+ 
 	int t;
 	cin>>t;
 	while(t--)
@@ -67,28 +58,39 @@ int main()
 		cin>>n>>k;
 		string st;
 		cin>>st;
-		vector<string>temp;
-		int cnt=1;
-		int start=0;
-		while(cnt<=n/k)
+		memset(vis,false,sizeof(vis));
+		vector<vector<int>>ada(n);
+ 
+		//unordered_map<int,vector<int>>ada;
+		auto add_edge = [&] (int i, int j) {
+      	if (j < n) {
+        			ada[i].push_back(j);
+        			ada[j].push_back(i);
+      				}
+    		};
+		for(int i=0;i<n;i++)
 		{
-			temp.pb(st.substr(start,k));
-			start+=k;
-			cnt++;
+			add_edge(i,n-1-i);
+			add_edge(i,i+k);
 		}
-		int max_match=0;
-		string max_string;
-		for(auto it:temp)
+		int ans=0;
+		for(int i=0;i<n;i++)
 		{
-			int get=match(it);
-			if(get>max_match)
+			if(!vis[i])
 			{
-				max_match=get;
-				max_string=it;
+				memset(freq,0,sizeof(freq));
+				comp_sz=0;
+				dfs(i,st,ada);
+				int max_freq=0;
+				for(int i=0;i<26;i++)
+					max_freq=max(max_freq,freq[i]);
+				ans+=(comp_sz-max_freq);
 			}
 		}
-		cout<<max_string<<endl;
-
+		cout<<ans<<endl;
+ 
+ 
 	}
-
+ 
+ 
 }
